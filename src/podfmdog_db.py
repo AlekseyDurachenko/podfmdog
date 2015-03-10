@@ -53,10 +53,10 @@ class PodfmPodcastDb:
     def __init__(self):
         path = os.path.expanduser("~")          \
                 + os.path.sep + ".config"       \
-                + os.path.sep + "podfmspider"
+                + os.path.sep + "podfmdog"
         if not os.path.exists(path):
             os.makedirs(path)
-        self.__conn = sqlite3.connect(os.path.join(path, 'podfmspider.db'))
+        self.__conn = sqlite3.connect(os.path.join(path, 'podfmdog.db'))
         self.__conn.text_factory = str
 
     def create_tables(self):
@@ -105,6 +105,18 @@ class PodfmPodcastDb:
             cursor.execute(
                 "INSERT INTO TChannel(link, subdir, active, comment) "
                 "VALUES(?, ?, ?, ?)", (link, subdir, 1, comment))
+            self.__conn.commit()
+        except sqlite3.IntegrityError:
+            return False
+        else:
+            return True
+
+    def edit_channel(self, link, subdir, comment=""):
+        try:
+            cursor = self.__conn.cursor()
+            cursor.execute(
+                "UPDATE TChannel SET subdir = ? "
+                "WHERE link = ?", (subdir, link))
             self.__conn.commit()
         except sqlite3.IntegrityError:
             return False

@@ -21,13 +21,14 @@ import urllib.request
 import shutil
 import sys
 import notify2
-from podfmspider_db import *
+from podfmdog_db import *
 
 
 class PodfmPodcastDownloader:
     __db = None
 
     def __init__(self, db):
+        notify2.init("podfmdog")
         self.__db = db
 
     def download_directory(self):
@@ -52,6 +53,10 @@ class PodfmPodcastDownloader:
             self.download_directory(), subdir, self.parse_url(url))
 
     def download_url(self, url, dst_filename):
+        dir = os.path.dirname(dst_filename)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+
         try:
             print("Download url: %s" % (url,))
             tmp_filename, h = urllib.request.urlretrieve(url)
@@ -85,7 +90,7 @@ class PodfmPodcastDownloader:
                     self.__db.add_podcast(link, podcast["podcast_url"])
                     rss_entry = podcast["rss_entry"]
                     notify = notify2.Notification(
-                        u"New podcast is available",
+                        "New podcast is available",
                         self.create_description(rss_entry))
                     notify.show()
 
@@ -94,9 +99,9 @@ class PodfmPodcastDownloader:
             if channel["active"]:
                 self.download_podcast(channel["link"], channel["subdir"])
 
-notify2.init("podfmspider")
-podfm_downloader = PodfmPodcastDownloader(PodfmPodcastDb())
-podfm_downloader.download_channels()
+
+#podfm_downloader = PodfmPodcastDownloader(PodfmPodcastDb())
+#podfm_downloader.download_channels()
 
 # db = PodfmPodcastDb()
 # db.create_tables()
