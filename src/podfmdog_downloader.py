@@ -98,17 +98,3 @@ class PodfmPodcastDownloader:
         for channel in self.__db.get_channels():
             if channel["active"]:
                 self.download_podcast(channel["link"], channel["subdir"])
-
-
-#podfm_downloader = PodfmPodcastDownloader(PodfmPodcastDb())
-#podfm_downloader.download_channels()
-
-# db = PodfmPodcastDb()
-# db.create_tables()
-# db.set_property("download_directory", "/tmp/podfm")
-# db.add_channel("http://fantastic.podfm.ru/rss/rss.xml", "fantastic")
-# db.add_channel("http://almanah.podfm.ru/rss/rss.xml", "almanah")
-# db.add_channel("http://sb.podfm.ru/rss/rss.xml", "sb")
-# db.add_channel("http://mds.podfm.ru/rss/rss.xml", "mds")
-# db.add_channel("http://radius.podfm.ru/rss/rss.xml", "radius")
-# db.add_channel("http://abachilo.podfm.ru/rss/rss.xml", "abachilo")
