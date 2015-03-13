@@ -63,6 +63,9 @@ class PodfmPodcastDownloader:
             print("Download url: %s" % (url,))
             tmp_filename, h = urllib.request.urlretrieve(url)
             print("Download complete! Temporary filename: %s" % (tmp_filename,))
+            if os.path.getsize(tmp_filename) < 1024*512:
+                print("The size of a file is less than 512k")
+                return False
             shutil.move(tmp_filename, dst_filename)
             print("Moving complete! Permanent filename: %s" % (dst_filename,))
             return True
