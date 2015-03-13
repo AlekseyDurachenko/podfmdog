@@ -45,6 +45,8 @@ class PodfmPodcastDownloader:
                     for entry in d.entries
                     for link in entry.links
                     if link.type == "audio/mpeg"]
+        except KeyboardInterrupt:
+            sys.exit(0)
         except:
             return None
 
@@ -80,6 +82,9 @@ class PodfmPodcastDownloader:
 
     def download_podcast(self, link, subdir):
         podcasts = self.parse_rss(link)
+        if podcasts is None:
+            print("Can't parse the rss feed: %s" %(link,))
+            return None
         exists_podcasts = set(self.__db.get_podcasts(link))
 
         for podcast in podcasts:
