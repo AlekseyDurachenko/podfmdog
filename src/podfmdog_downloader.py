@@ -63,8 +63,8 @@ class PodfmPodcastDownloader:
             print("Download url: %s" % (url,))
             tmp_filename, h = urllib.request.urlretrieve(url)
             print("Download complete! Temporary filename: %s" % (tmp_filename,))
-            if os.path.getsize(tmp_filename) < 1024*512:
-                print("The size of a file is less than 512k")
+            if os.path.getsize(tmp_filename) < 1024*128:
+                print("The size of a file is less than 128k")
                 return False
             shutil.move(tmp_filename, dst_filename)
             print("Moving complete! Permanent filename: %s" % (dst_filename,))
@@ -91,11 +91,17 @@ class PodfmPodcastDownloader:
         exists_podcasts = set(self.__db.get_podcasts(link))
 
         for podcast in podcasts:
-            if podcast["podcast_url"] not in exists_podcasts:
+            # http or https links are mixed in the rss,
+            # we should to prevent this situation
+            http_podcast_url = podcast["podcast_url"]
+            if http_podcast_url[0:5] == "https":
+                http_podcast_url = "http" + http_podcast_url[5:]
+            print(http_podcast_url)
+            if http_podcast_url not in exists_podcasts:
                 if self.download_url(
                         podcast["media_url"],
                         self.dst_filename(podcast["media_url"], subdir)):
-                    self.__db.add_podcast(link, podcast["podcast_url"])
+                    self.__db.add_podcast(link, http_podcast_url)
                     rss_entry = podcast["rss_entry"]
                     notify = notify2.Notification(
                         "New podcast is available",
