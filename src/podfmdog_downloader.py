@@ -28,7 +28,6 @@ class PodfmPodcastDownloader:
     __db = None
 
     def __init__(self, db):
-        notify2.init("podfmdog")
         self.__db = db
 
     def download_directory(self):
@@ -96,17 +95,20 @@ class PodfmPodcastDownloader:
             http_podcast_url = podcast["podcast_url"]
             if http_podcast_url[0:5] == "https":
                 http_podcast_url = "http" + http_podcast_url[5:]
-            print(http_podcast_url)
             if http_podcast_url not in exists_podcasts:
                 if self.download_url(
                         podcast["media_url"],
                         self.dst_filename(podcast["media_url"], subdir)):
                     self.__db.add_podcast(link, http_podcast_url)
                     rss_entry = podcast["rss_entry"]
-                    notify = notify2.Notification(
-                        "New podcast is available",
-                        self.create_description(rss_entry))
-                    notify.show()
+                    try:
+                        notify2.init("podfmdog")
+                        notify = notify2.Notification(
+                            "New podcast is available",
+                            self.create_description(rss_entry))
+                        notify.show()
+                    except:
+                        pass
 
     def download_channels(self):
         for channel in self.__db.get_channels():
