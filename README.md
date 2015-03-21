@@ -12,8 +12,8 @@ podfmdog
 sudo apt-get install python3 python3-notify2
 ```
 
-Использование утилиты
----------------------
+Как пользоваться?
+-----------------
 ```bash
 $ podfmdog_ctl.py
 === podfmdog cotrol v.0.1.0 ===
@@ -38,8 +38,11 @@ $ podfmdog_ctl.py set download_directory /home/username/your_download_directory
 После этого вам потребуется добавить каналы, которые вы хотите автоматически загружать,
 следующей командой: 
 ```bash
-$ podfmdog_ctl.py channel add http://some-channel.podfm.ru/some-path/rss.xml
+$ podfmdog_ctl.py channel add http://some-channel.podfm.ru/some-path/rss.xml some-channel-directory
 ```
+
+В результате все аудиофайлы данного канала будут загружены в
+/home/username/your_download_directory/some-channel-directory
 
 Файл настроек представляет из себя файл базы данных SQLite, который располагается по
 адресу ~/.config/podfmdog/podfmdog.db
