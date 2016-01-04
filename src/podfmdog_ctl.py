@@ -61,7 +61,7 @@ def channel_remove(db, link):
 
 
 def print_usage():
-    print("""=== podfmdog control v.0.1.0 ===
+    print("""=== podfmdog conOAtrol v.0.1.0 ===
 Usage:
     podfmdog_ctl.py <command> <arg1> ... <argN>
 Command details:
@@ -69,7 +69,7 @@ Command details:
     set download_directory <path>   -- set the download directory
     get download_directory          -- show the download directory
     channel add <rss_url> <subdir>  -- add the podcast
-    channel edit <rss_url> <subdir> -- add the podcast
+    channel edit <rss_url> <subdir> -- change the podcast directory
     channel remove <rss_url>        -- remove the podcast
     channel list                    -- show the podcast list
 """)
